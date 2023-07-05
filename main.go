@@ -65,7 +65,7 @@ func (us *UserService) GetUser(w http.ResponseWriter, r *http.Request) {
 	user, ok := us.users[id]
 	if !ok {
 		http.NotFound(w, r)
-		log.Printf("NotFound", err.Error())
+		log.Printf("NotFound")
 		return
 	}
 
@@ -108,6 +108,10 @@ func (us *UserService) UpdateUser(w http.ResponseWriter, r *http.Request) {
 		log.Print("Cannot change ID or Token")
 		return
 	}
+
+	// Обновляем информацию
+	user.Name = newUser.Name
+	user.Age = newUser.Age
 
 	fmt.Fprint(w, "User info updated succesfully")
 	log.Print("User info updated succesfully. ID=%d", id)
