@@ -1,1 +1,14 @@
-# A Basic Web Server implemented in go programming language
+# Тестовое задание TAGES (golang)
+
+http сервис, который хранит в памяти информацию о пользователях в виде:
+```go
+type User struct {
+	ID    int
+	Token string
+	Name  string
+	Age   int
+}
+```
+Сервис может обрабатывать два вида запросов:
+1. `GET /user/{id}` - отдает пользователю структуру User перекодированную в json.
+2. `POST /user/{id}` - обновляет информацию о пользователе раскодируя son внутрь объекта User, но клиент не может изменять `ID` и `Token`
