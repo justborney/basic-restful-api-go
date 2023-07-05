@@ -92,7 +92,7 @@ func (us *UserService) UpdateUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Проверка на то, что ID и токен не изменены
-	if user.ID != id || user.Token != us.users[id].Token {
+	if user.ID != us.users[id].ID || user.Token != us.users[id].Token {
 		http.Error(w, "Cannot change ID or Token", http.StatusBadRequest)
 		return
 	}
