@@ -6,6 +6,7 @@ import (
 	"github.com/gorilla/mux"
 	"log"
 	"net/http"
+	"os"
 	"strconv"
 )
 
@@ -28,6 +29,9 @@ func NewUserService() *UserService {
 }
 
 func main() {
+	l := log.Default()
+	l.SetOutput(os.Stderr)
+
 	userService := NewUserService()
 	user1 := &User{ID: 1, Token: "token1", Name: "John Doe", Age: 25}
 	user2 := &User{ID: 2, Token: "token2", Name: "Jane Smith", Age: 30}
@@ -54,12 +58,14 @@ func (us *UserService) GetUser(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		http.Error(w, "Invalid user ID", http.StatusBadRequest)
+		log.Printf("Invalid user ID", err.Error())
 		return
 	}
 
 	user, ok := us.users[id]
 	if !ok {
 		http.NotFound(w, r)
+		log.Printf("NotFound", err.Error())
 		return
 	}
 
@@ -75,29 +81,36 @@ func (us *UserService) UpdateUser(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		http.Error(w, "Invalid user ID", http.StatusBadRequest)
+		log.Print("Invalid user ID", err.Error())
 		return
 	}
 
 	user, ok := us.users[id]
 	if !ok {
 		http.NotFound(w, r)
+		log.Print("NotFound", err.Error())
 		return
 	}
 
 	// Декодируем тело запроса
-	err = json.NewDecoder(r.Body).Decode(user)
+	var newUser User
+	decoder := json.NewDecoder(r.Body)
+	err = decoder.Decode(&newUser)
 	if err != nil {
 		http.Error(w, "Invalid JSON", http.StatusBadRequest)
+		log.Print("Invalid JSON", err.Error())
 		return
 	}
 
 	// Проверка на то, что ID и токен не изменены
-	if user.ID != us.users[id].ID || user.Token != us.users[id].Token {
+	if newUser.ID != id || newUser.Token != user.Token {
 		http.Error(w, "Cannot change ID or Token", http.StatusBadRequest)
+		log.Print("Cannot change ID or Token")
 		return
 	}
 
 	fmt.Fprint(w, "User info updated succesfully")
+	log.Print("User info updated succesfully. ID=%d", id)
 }
 
 func (us *UserService) AddUser(user *User) {
