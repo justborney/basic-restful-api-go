@@ -48,8 +48,3 @@ curl -X POST -H "Content-Type: application/json" -d "{\"id\":1,\"token\":\"token
 curl -X POST -H "Content-Type: application/json" -d "{\"invalid\":json}" http://localhost:8080/user/1
 ```
 >`Invalid JSON`
-
-```shell
-curl -X POST -H "Content-Type: application/json" -d "{\"id\":1,\"token\":\"token2\",\"name\":\"New Name\",\"age\":26}" http://localhost:8080/user/1
-
-```
