@@ -6,7 +6,6 @@ import (
 	"github.com/gorilla/mux"
 	"log"
 	"net/http"
-	"os"
 	"strconv"
 )
 
@@ -29,9 +28,6 @@ func NewUserService() *UserService {
 }
 
 func main() {
-	l := log.Default()
-	l.SetOutput(os.Stderr)
-
 	userService := NewUserService()
 	user1 := &User{ID: 1, Token: "token1", Name: "John Doe", Age: 25}
 	user2 := &User{ID: 2, Token: "token2", Name: "Jane Smith", Age: 30}
@@ -65,7 +61,7 @@ func (us *UserService) GetUser(w http.ResponseWriter, r *http.Request) {
 	user, ok := us.users[id]
 	if !ok {
 		http.NotFound(w, r)
-		log.Printf("NotFound")
+		log.Print("NotFound")
 		return
 	}
 
@@ -88,7 +84,7 @@ func (us *UserService) UpdateUser(w http.ResponseWriter, r *http.Request) {
 	user, ok := us.users[id]
 	if !ok {
 		http.NotFound(w, r)
-		log.Print("NotFound", err.Error())
+		log.Print("NotFound")
 		return
 	}
 
@@ -114,7 +110,7 @@ func (us *UserService) UpdateUser(w http.ResponseWriter, r *http.Request) {
 	user.Age = newUser.Age
 
 	fmt.Fprint(w, "User info updated succesfully")
-	log.Print("User info updated succesfully. ID=%d", id)
+	log.Printf("User info updated succesfully. ID=%d", id)
 }
 
 func (us *UserService) AddUser(user *User) {
