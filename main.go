@@ -44,7 +44,7 @@ func main() {
 }
 
 func index(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Available endpoints\nGET /user/\nPOST /user/")
+	fmt.Fprint(w, "Available endpoints\nGET /user/\nPOST /user/")
 }
 
 // GetUser обрабатывает GET запрос
